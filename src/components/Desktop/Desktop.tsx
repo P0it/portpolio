@@ -46,12 +46,13 @@ export default function Desktop() {
     dragRef.current = { id: folderId, startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y };
 
     const handleMouseMove = (ev: MouseEvent) => {
-      if (!dragRef.current) return;
-      const dx = ev.clientX - dragRef.current.startX;
-      const dy = ev.clientY - dragRef.current.startY;
+      const drag = dragRef.current;
+      if (!drag) return;
+      const dx = ev.clientX - drag.startX;
+      const dy = ev.clientY - drag.startY;
       setFolderPositions((prev) => ({
         ...prev,
-        [dragRef.current!.id]: { x: dragRef.current!.origX + dx, y: dragRef.current!.origY + dy },
+        [drag.id]: { x: drag.origX + dx, y: drag.origY + dy },
       }));
     };
 
