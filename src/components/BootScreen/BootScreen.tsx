@@ -58,11 +58,7 @@ export default function BootScreen({ onComplete }: BootScreenProps) {
 
           {/* Progress Bar */}
           <div style={{ width: 200, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }}>
-            <motion.div
-              style={{ height: '100%', borderRadius: 2, background: 'rgba(255,255,255,0.8)' }}
-              animate={{ width: `${progress}%` }}
-              transition={{ ease: 'linear' }}
-            />
+            <div style={{ height: '100%', borderRadius: 2, background: 'rgba(255,255,255,0.8)', width: `${progress}%`, transition: 'width 0.05s linear' }} />
           </div>
         </motion.div>
       )}
