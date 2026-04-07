@@ -83,7 +83,10 @@ export default function Dock() {
         id: `${app.appId}-main`,
         appId: app.appId as WindowState['appId'],
         title: app.windowConfig.title,
-        position: { x: 100 + Math.random() * 80, y: 60 + Math.random() * 40 },
+        position: {
+          x: Math.round((window.innerWidth - app.windowConfig.size.width) / 2),
+          y: Math.round((window.innerHeight - app.windowConfig.size.height) / 2) - 20,
+        },
         size: app.windowConfig.size,
         props: app.windowConfig.props,
       });

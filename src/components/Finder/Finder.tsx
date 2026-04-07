@@ -72,7 +72,10 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
           id: `pdf-${node.id}`,
           appId: 'pdf-viewer',
           title: node.name,
-          position: { x: 200 + Math.random() * 100, y: 80 + Math.random() * 50 },
+          position: {
+            x: Math.round((window.innerWidth - 750) / 2),
+            y: Math.round((window.innerHeight - 600) / 2) - 20,
+          },
           size: { width: 750, height: 600 },
           props: { fileId: node.id },
         });

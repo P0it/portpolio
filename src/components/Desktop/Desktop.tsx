@@ -22,7 +22,10 @@ export default function Desktop() {
         id: `finder-${folderId}`,
         appId: 'finder',
         title: folderName,
-        position: { x: 120 + Math.random() * 80, y: 60 + Math.random() * 40 },
+        position: {
+          x: Math.round((window.innerWidth - 800) / 2),
+          y: Math.round((window.innerHeight - 500) / 2) - 20,
+        },
         size: { width: 800, height: 500 },
         props: { currentPath: folderId },
       });
