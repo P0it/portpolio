@@ -6,6 +6,12 @@ import Finder from './components/Finder/Finder';
 import PDFViewer from './components/PDFViewer/PDFViewer';
 import ITerm from './components/iTerm/iTerm';
 import ResumeViewer from './components/ResumeViewer/ResumeViewer';
+import Safari from './components/MiniApps/Safari';
+import Messages from './components/MiniApps/Messages';
+import Mail from './components/MiniApps/Mail';
+import Photos from './components/MiniApps/Photos';
+import Music from './components/MiniApps/Music';
+import VSCode from './components/MiniApps/VSCode';
 import { useWindowStore } from './stores/windowStore';
 
 export default function App() {
@@ -33,6 +39,12 @@ export default function App() {
           )}
           {win.appId === 'iterm' && <ITerm />}
           {win.appId === 'resume' && <ResumeViewer />}
+          {win.appId === 'safari' && <Safari />}
+          {win.appId === 'messages' && <Messages />}
+          {win.appId === 'mail' && <Mail />}
+          {win.appId === 'photos' && <Photos />}
+          {win.appId === 'music' && <Music />}
+          {win.appId === 'vscode' && <VSCode />}
         </AppWindow>
       ))}
 

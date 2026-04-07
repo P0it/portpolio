@@ -17,8 +17,8 @@ export const profile: ProfileData = {
   about:
     'Passionate full-stack developer with experience building scalable web applications, AI-powered platforms, and developer tools. Focused on clean architecture and great user experiences.',
   email: 'placeholder@email.com',
-  github: 'Xv-Hyunwoo',
-  githubUrl: 'https://github.com/Xv-Hyunwoo',
+  github: 'P0it',
+  githubUrl: 'https://github.com/P0it',
   linkedin: 'placeholder',
   linkedinUrl: 'https://linkedin.com/in/placeholder',
   skills: [
