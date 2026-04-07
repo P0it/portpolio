@@ -249,12 +249,121 @@ export default function MenuBar() {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center shrink-0" style={{ gap: 18 }}>
-        <img src="/icons/battery.png" alt="Battery" className="opacity-80" style={{ height: 12, width: 'auto', filter: 'brightness(0) invert(1)' }} draggable={false} />
-        <img src="/icons/wifi.png" alt="WiFi" className="opacity-80" style={{ height: 12, width: 12, filter: 'brightness(0) invert(1)' }} draggable={false} />
-        <img src="/icons/search.png" alt="Spotlight" className="opacity-80" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
-        <img src="/icons/control-center.png" alt="Control Center" className="opacity-80" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
-        <span className="text-[12.5px] tracking-tight whitespace-nowrap">{formattedTime}</span>
+      <div className="flex items-center shrink-0" style={{ gap: 4 }}>
+        {/* Battery */}
+        <div className="relative">
+          <button
+            className="flex items-center justify-center opacity-80 hover:opacity-100"
+            style={{ padding: '0 8px', height: 25, borderRadius: 4, background: openMenu === 'battery' ? 'rgba(255,255,255,0.15)' : undefined }}
+            onClick={(e) => toggleMenu('battery', e)}
+            onMouseEnter={() => handleMenuHover('battery')}
+          >
+            <img src="/icons/battery.png" alt="Battery" style={{ height: 12, width: 'auto', filter: 'brightness(0) invert(1)' }} draggable={false} />
+          </button>
+          {openMenu === 'battery' && (
+            <div className="context-menu absolute top-[25px] right-0" style={{ minWidth: 220 }}>
+              <div className="context-menu-item" style={{ opacity: 0.5, pointerEvents: 'none' }}>Battery: 100%</div>
+              <div className="context-menu-item" style={{ opacity: 0.5, pointerEvents: 'none' }}>Power Source: Charger</div>
+              <div className="context-menu-separator" />
+              <div className="context-menu-item" style={{ opacity: 0.5, pointerEvents: 'none' }}>This is a simulated macOS</div>
+            </div>
+          )}
+        </div>
+
+        {/* WiFi */}
+        <div className="relative">
+          <button
+            className="flex items-center justify-center opacity-80 hover:opacity-100"
+            style={{ padding: '0 8px', height: 25, borderRadius: 4, background: openMenu === 'wifi' ? 'rgba(255,255,255,0.15)' : undefined }}
+            onClick={(e) => toggleMenu('wifi', e)}
+            onMouseEnter={() => handleMenuHover('wifi')}
+          >
+            <img src="/icons/wifi.png" alt="WiFi" style={{ height: 12, width: 12, filter: 'brightness(0) invert(1)' }} draggable={false} />
+          </button>
+          {openMenu === 'wifi' && (
+            <div className="context-menu absolute top-[25px] right-0" style={{ minWidth: 220 }}>
+              <div className="context-menu-item font-semibold">Wi-Fi</div>
+              <div className="context-menu-separator" />
+              <div className="context-menu-item" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Portfolio-Network</span><span style={{ opacity: 0.4 }}>✓</span>
+              </div>
+              <div className="context-menu-item" style={{ opacity: 0.4, pointerEvents: 'none' }}>Developer-5G</div>
+              <div className="context-menu-item" style={{ opacity: 0.4, pointerEvents: 'none' }}>Coffee-Shop-WiFi</div>
+              <div className="context-menu-separator" />
+              <div className="context-menu-item">Network Settings...</div>
+            </div>
+          )}
+        </div>
+
+        {/* Spotlight */}
+        <div className="relative">
+          <button
+            className="flex items-center justify-center opacity-80 hover:opacity-100"
+            style={{ padding: '0 8px', height: 25, borderRadius: 4, background: openMenu === 'spotlight' ? 'rgba(255,255,255,0.15)' : undefined }}
+            onClick={(e) => toggleMenu('spotlight', e)}
+            onMouseEnter={() => handleMenuHover('spotlight')}
+          >
+            <img src="/icons/search.png" alt="Spotlight" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
+          </button>
+          {openMenu === 'spotlight' && (
+            <div className="context-menu absolute top-[25px] right-0" style={{ minWidth: 260 }}>
+              <div className="context-menu-item" style={{ opacity: 0.5, pointerEvents: 'none' }}>Spotlight Search</div>
+              <div className="context-menu-separator" />
+              <div className="context-menu-item" style={{ opacity: 0.4, pointerEvents: 'none', fontSize: 12 }}>
+                Try clicking the apps in the Dock!
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Control Center */}
+        <div className="relative">
+          <button
+            className="flex items-center justify-center opacity-80 hover:opacity-100"
+            style={{ padding: '0 8px', height: 25, borderRadius: 4, background: openMenu === 'controlcenter' ? 'rgba(255,255,255,0.15)' : undefined }}
+            onClick={(e) => toggleMenu('controlcenter', e)}
+            onMouseEnter={() => handleMenuHover('controlcenter')}
+          >
+            <img src="/icons/control-center.png" alt="Control Center" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
+          </button>
+          {openMenu === 'controlcenter' && (
+            <div className="context-menu absolute top-[25px] right-0" style={{ minWidth: 260, padding: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>Wi-Fi</div>
+                  <div style={{ fontSize: 13, color: 'white' }}>Connected</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>Bluetooth</div>
+                  <div style={{ fontSize: 13, color: 'white' }}>On</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>AirDrop</div>
+                  <div style={{ fontSize: 13, color: 'white' }}>Everyone</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>Focus</div>
+                  <div style={{ fontSize: 13, color: 'white' }}>Off</div>
+                </div>
+              </div>
+              <div style={{ marginTop: 10, background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>Display</div>
+                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }}>
+                  <div style={{ height: '100%', width: '75%', borderRadius: 2, background: 'white' }} />
+                </div>
+              </div>
+              <div style={{ marginTop: 10, background: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>Sound</div>
+                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }}>
+                  <div style={{ height: '100%', width: '50%', borderRadius: 2, background: 'white' }} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Date & Time */}
+        <span className="text-[12.5px] tracking-tight whitespace-nowrap" style={{ padding: '0 4px' }}>{formattedTime}</span>
       </div>
     </div>
   );
