@@ -19,7 +19,7 @@ export interface FileSystemNode {
 
 export interface WindowState {
   id: string;
-  appId: 'finder' | 'pdf-viewer' | 'about';
+  appId: 'finder' | 'pdf-viewer' | 'about' | 'iterm' | 'resume';
   title: string;
   isOpen: boolean;
   isMinimized: boolean;
