@@ -67,7 +67,7 @@ export default function MenuBar() {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 shrink-0">
         {/* Battery */}
         <img src="/icons/battery.png" alt="Battery" className="opacity-80" style={{ height: 12, width: 'auto', filter: 'brightness(0) invert(1)' }} draggable={false} />
 
@@ -81,7 +81,7 @@ export default function MenuBar() {
         <img src="/icons/control-center.png" alt="Control Center" className="opacity-80" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
 
         {/* Date & Time */}
-        <span className="text-[12.5px] tracking-tight">{formattedTime}</span>
+        <span className="text-[12.5px] tracking-tight whitespace-nowrap">{formattedTime}</span>
       </div>
     </div>
   );

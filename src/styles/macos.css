@@ -56,9 +56,14 @@ html, body, #root {
 }
 
 /* ===== Dock ===== */
-.dock-glass-wrapper {
-  border-radius: 18px !important;
-  padding: 3px 6px !important;
+.dock-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 18px;
+  padding: 3px 6px;
+  overflow: visible;
 }
 
 .dock-item {
@@ -89,6 +94,7 @@ html, body, #root {
 /* ===== Window ===== */
 .window-frame {
   border-radius: var(--window-radius);
+  background: rgba(35, 35, 35, 0.95);
   box-shadow:
     0 22px 70px 4px rgba(0, 0, 0, 0.3),
     0 0 0 0.5px rgba(0, 0, 0, 0.2),
