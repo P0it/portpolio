@@ -13,12 +13,14 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
   const [history, setHistory] = useState<string[]>([initialPath]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const { getNode, getChildren } = useFileSystemStore();
+  const nodes = useFileSystemStore((s) => s.nodes);
   const { openWindow } = useWindowStore();
   const windows = useWindowStore((s) => s.windows);
 
-  const currentNode = getNode(currentPath);
-  const children = getChildren(currentPath);
+  const currentNode = nodes[currentPath];
+  const children = currentNode?.children
+    ? currentNode.children.map((childId) => nodes[childId]).filter(Boolean)
+    : [];
 
   const navigateTo = useCallback(
     (nodeId: string) => {
@@ -32,7 +34,7 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
       // Update window title
       const win = windows.find((w) => w.id === windowId);
       if (win) {
-        const node = getNode(nodeId);
+        const node = nodes[nodeId];
         useWindowStore.setState({
           windows: windows.map((w) =>
             w.id === windowId ? { ...w, title: node?.name || 'Finder' } : w
@@ -40,7 +42,7 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
         });
       }
     },
-    [history, historyIndex, windowId, windows, getNode]
+    [history, historyIndex, windowId, windows, nodes]
   );
 
   const goBack = useCallback(() => {
@@ -195,16 +197,7 @@ function SidebarIcon({ type }: { type: string }) {
 function FileIcon({ node }: { node: FileSystemNode }) {
   if (node.type === 'folder') {
     return (
-      <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
-        <path
-          d="M4 8C4 5.79 5.79 4 8 4H22L26 8H48C50.21 8 52 9.79 52 12V40C52 42.21 50.21 44 48 44H8C5.79 44 4 42.21 4 40V8Z"
-          fill="#5AC8FA"
-        />
-        <path
-          d="M4 16H52V40C52 42.21 50.21 44 48 44H8C5.79 44 4 42.21 4 40V16Z"
-          fill="#40A9FF"
-        />
-      </svg>
+      <img src="/icons/folder.png" alt={node.name} width={56} height={48} style={{ objectFit: 'contain' }} draggable={false} />
     );
   }
 
