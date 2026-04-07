@@ -4,6 +4,8 @@ import Dock from './components/Dock/Dock';
 import AppWindow from './components/Window/AppWindow';
 import Finder from './components/Finder/Finder';
 import PDFViewer from './components/PDFViewer/PDFViewer';
+import ITerm from './components/iTerm/iTerm';
+import ResumeViewer from './components/ResumeViewer/ResumeViewer';
 import { useWindowStore } from './stores/windowStore';
 
 export default function App() {
@@ -29,6 +31,8 @@ export default function App() {
           {win.appId === 'pdf-viewer' && (
             <PDFViewer fileId={(win.props?.fileId as string) || ''} />
           )}
+          {win.appId === 'iterm' && <ITerm />}
+          {win.appId === 'resume' && <ResumeViewer />}
         </AppWindow>
       ))}
 
