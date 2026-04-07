@@ -8,11 +8,24 @@ interface FinderProps {
   windowId: string;
 }
 
+type ViewMode = 'icons' | 'list';
+
+function buildBreadcrumb(nodes: Record<string, FileSystemNode>, nodeId: string): { id: string; name: string }[] {
+  const crumbs: { id: string; name: string }[] = [];
+  let current = nodes[nodeId];
+  while (current) {
+    crumbs.unshift({ id: current.id, name: current.name });
+    current = current.parentId ? nodes[current.parentId] : undefined!;
+  }
+  return crumbs;
+}
+
 export default function Finder({ initialPath, windowId }: FinderProps) {
   const [currentPath, setCurrentPath] = useState(initialPath);
   const [history, setHistory] = useState<string[]>([initialPath]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('icons');
   const nodes = useFileSystemStore((s) => s.nodes);
   const { openWindow } = useWindowStore();
   const windows = useWindowStore((s) => s.windows);
@@ -21,6 +34,10 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
   const children = currentNode?.children
     ? currentNode.children.map((childId) => nodes[childId]).filter(Boolean)
     : [];
+
+  const breadcrumb = buildBreadcrumb(nodes, currentPath);
+  const folderCount = children.filter((c) => c.type === 'folder').length;
+  const fileCount = children.filter((c) => c.type === 'file').length;
 
   const navigateTo = useCallback(
     (nodeId: string) => {
@@ -31,7 +48,6 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
       setHistory(newHistory);
       setHistoryIndex(newHistory.length - 1);
 
-      // Update window title
       const win = windows.find((w) => w.id === windowId);
       if (win) {
         const node = nodes[nodeId];
@@ -92,7 +108,7 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
   ];
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full rounded-b-[10px] overflow-hidden">
       {/* Sidebar */}
       <div className="finder-sidebar">
         {sidebarItems.map((item, i) => {
@@ -117,57 +133,161 @@ export default function Finder({ initialPath, windowId }: FinderProps) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Toolbar */}
-        <div className="finder-toolbar">
-          <button
-            className={`p-1 rounded ${historyIndex > 0 ? 'hover:bg-white/10' : 'opacity-30'}`}
-            onClick={goBack}
-            disabled={historyIndex <= 0}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" fillOpacity="0.7">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-            </svg>
-          </button>
-          <button
-            className={`p-1 rounded ${
-              historyIndex < history.length - 1 ? 'hover:bg-white/10' : 'opacity-30'
-            }`}
-            onClick={goForward}
-            disabled={historyIndex >= history.length - 1}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" fillOpacity="0.7">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-            </svg>
-          </button>
-          <div className="flex-1 text-center text-[13px] text-white/70 font-medium">
-            {currentNode?.name || 'Finder'}
+        <div className="finder-toolbar" style={{ padding: '0 16px', gap: 8 }}>
+          {/* Nav buttons */}
+          <div className="flex items-center" style={{ gap: 4 }}>
+            <button
+              className={`rounded ${historyIndex > 0 ? 'hover:bg-white/10' : 'opacity-30'}`}
+              style={{ padding: '2px 6px' }}
+              onClick={goBack}
+              disabled={historyIndex <= 0}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" fillOpacity="0.7">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
+            </button>
+            <button
+              className={`rounded ${historyIndex < history.length - 1 ? 'hover:bg-white/10' : 'opacity-30'}`}
+              style={{ padding: '2px 6px' }}
+              onClick={goForward}
+              disabled={historyIndex >= history.length - 1}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" fillOpacity="0.7">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Breadcrumb */}
+          <div className="flex-1 flex items-center" style={{ gap: 4, minWidth: 0 }}>
+            {breadcrumb.map((crumb, i) => (
+              <div key={crumb.id} className="flex items-center" style={{ gap: 4 }}>
+                {i > 0 && <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>▶</span>}
+                <button
+                  className="text-[12px] hover:bg-white/10 rounded truncate"
+                  style={{
+                    color: i === breadcrumb.length - 1 ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)',
+                    padding: '2px 6px',
+                    maxWidth: 120,
+                    fontWeight: i === breadcrumb.length - 1 ? 500 : 400,
+                  }}
+                  onClick={() => navigateTo(crumb.id)}
+                >
+                  {crumb.name}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* View mode toggle */}
+          <div className="flex items-center shrink-0 rounded" style={{ background: 'rgba(255,255,255,0.06)', padding: 2 }}>
+            <button
+              className="rounded"
+              style={{
+                padding: '3px 8px',
+                fontSize: 11,
+                color: viewMode === 'icons' ? 'white' : 'rgba(255,255,255,0.4)',
+                background: viewMode === 'icons' ? 'rgba(255,255,255,0.12)' : undefined,
+              }}
+              onClick={() => setViewMode('icons')}
+            >
+              ⊞
+            </button>
+            <button
+              className="rounded"
+              style={{
+                padding: '3px 8px',
+                fontSize: 11,
+                color: viewMode === 'list' ? 'white' : 'rgba(255,255,255,0.4)',
+                background: viewMode === 'list' ? 'rgba(255,255,255,0.12)' : undefined,
+              }}
+              onClick={() => setViewMode('list')}
+            >
+              ☰
+            </button>
           </div>
         </div>
 
-        {/* File Grid */}
-        <div className="finder-content" onClick={() => setSelectedItem(null)}>
-          {children.map((node) => (
-            <div
-              key={node.id}
-              className={`finder-item ${selectedItem === node.id ? 'selected' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedItem(node.id);
-              }}
-              onDoubleClick={(e) => {
-                e.stopPropagation();
-                handleDoubleClick(node);
-              }}
-            >
-              <FileIcon node={node} />
-              <span className="finder-item-name">{node.name}</span>
+        {/* File Content */}
+        {viewMode === 'icons' ? (
+          <div className="finder-content" onClick={() => setSelectedItem(null)}>
+            {children.map((node) => (
+              <div
+                key={node.id}
+                className={`finder-item ${selectedItem === node.id ? 'selected' : ''}`}
+                onClick={(e) => { e.stopPropagation(); setSelectedItem(node.id); }}
+                onDoubleClick={(e) => { e.stopPropagation(); handleDoubleClick(node); }}
+              >
+                <FileIcon node={node} />
+                <span className="finder-item-name">{node.name}</span>
+              </div>
+            ))}
+            {children.length === 0 && (
+              <div className="col-span-full flex items-center justify-center h-32 text-white/30 text-sm">
+                This folder is empty
+              </div>
+            )}
+          </div>
+        ) : (
+          /* List View */
+          <div className="flex-1 overflow-y-auto" style={{ background: 'rgba(35, 35, 35, 0.95)' }} onClick={() => setSelectedItem(null)}>
+            {/* List Header */}
+            <div className="flex items-center border-b border-white/10" style={{ padding: '6px 20px', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+              <span className="flex-1">Name</span>
+              <span style={{ width: 100, textAlign: 'right' }}>Kind</span>
+              <span style={{ width: 100, textAlign: 'right' }}>Date</span>
             </div>
-          ))}
-          {children.length === 0 && (
-            <div className="col-span-full flex items-center justify-center h-32 text-white/30 text-sm">
-              This folder is empty
-            </div>
+            {children.map((node) => (
+              <div
+                key={node.id}
+                className="flex items-center hover:bg-white/5"
+                style={{
+                  padding: '6px 20px',
+                  cursor: 'default',
+                  background: selectedItem === node.id ? 'rgba(0,110,255,0.3)' : undefined,
+                }}
+                onClick={(e) => { e.stopPropagation(); setSelectedItem(node.id); }}
+                onDoubleClick={(e) => { e.stopPropagation(); handleDoubleClick(node); }}
+              >
+                <div className="flex items-center flex-1 min-w-0" style={{ gap: 8 }}>
+                  {node.type === 'folder' ? (
+                    <img src="/icons/folder.png" alt="" width={20} height={17} style={{ objectFit: 'contain' }} draggable={false} />
+                  ) : (
+                    <span style={{ fontSize: 16, width: 20, textAlign: 'center' }}>📄</span>
+                  )}
+                  <span className="truncate" style={{ fontSize: 13, color: selectedItem === node.id ? 'white' : 'rgba(255,255,255,0.85)' }}>
+                    {node.name}
+                  </span>
+                </div>
+                <span style={{ width: 100, textAlign: 'right', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
+                  {node.type === 'folder' ? 'Folder' : 'PDF'}
+                </span>
+                <span style={{ width: 100, textAlign: 'right', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
+                  Apr 7, 2026
+                </span>
+              </div>
+            ))}
+            {children.length === 0 && (
+              <div className="flex items-center justify-center h-32 text-white/30 text-sm">
+                This folder is empty
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Status Bar */}
+        <div className="shrink-0 flex items-center justify-between border-t border-white/10" style={{ padding: '4px 16px', background: 'rgba(45,45,45,0.6)' }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+            {children.length} item{children.length !== 1 ? 's' : ''}
+            {folderCount > 0 && ` · ${folderCount} folder${folderCount !== 1 ? 's' : ''}`}
+            {fileCount > 0 && ` · ${fileCount} file${fileCount !== 1 ? 's' : ''}`}
+          </span>
+          {selectedItem && nodes[selectedItem] && (
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>
+              {nodes[selectedItem].name}
+            </span>
           )}
         </div>
       </div>
@@ -204,7 +324,6 @@ function FileIcon({ node }: { node: FileSystemNode }) {
     );
   }
 
-  // File (PDF-like)
   return (
     <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
       <path d="M4 4C4 1.79 5.79 0 8 0H28L40 12V52C40 54.21 38.21 56 36 56H8C5.79 56 4 54.21 4 52V4Z" fill="#e8e8e8" />
