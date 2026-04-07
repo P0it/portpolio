@@ -27,9 +27,9 @@ export default function MenuBar() {
   });
 
   return (
-    <div className="menu-bar fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between px-4 overflow-hidden">
+    <div className="menu-bar fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between" style={{ padding: '0 20px' }}>
       {/* Left side */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center" style={{ gap: 20 }}>
         <div className="relative">
           <button
             className="flex items-center opacity-90 hover:opacity-100"
@@ -67,7 +67,7 @@ export default function MenuBar() {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-4 shrink-0">
+      <div className="flex items-center shrink-0" style={{ gap: 18 }}>
         {/* Battery */}
         <img src="/icons/battery.png" alt="Battery" className="opacity-80" style={{ height: 12, width: 'auto', filter: 'brightness(0) invert(1)' }} draggable={false} />
 
