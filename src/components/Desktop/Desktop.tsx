@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useFileSystemStore } from '../../stores/fileSystemStore';
 import { useWindowStore } from '../../stores/windowStore';
 import ContextMenu from '../ContextMenu/ContextMenu';
@@ -6,7 +6,14 @@ import ContextMenu from '../ContextMenu/ContextMenu';
 export default function Desktop() {
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
-  const desktopFolders = useFileSystemStore((s) => s.getDesktopFolders());
+  const nodes = useFileSystemStore((s) => s.nodes);
+  const desktopFolders = useMemo(() => {
+    const desktop = nodes['desktop'];
+    if (!desktop?.children) return [];
+    return desktop.children
+      .map((childId) => nodes[childId])
+      .filter(Boolean);
+  }, [nodes]);
   const { openWindow } = useWindowStore();
 
   const handleDoubleClick = useCallback(
@@ -32,18 +39,9 @@ export default function Desktop() {
     <div
       className="fixed inset-0 pt-[25px] pb-[76px]"
       style={{
-        background: `linear-gradient(135deg,
-          #ff6b35 0%,
-          #ff8c42 15%,
-          #ffa726 25%,
-          #ffcc02 35%,
-          #c5e063 45%,
-          #66bb6a 55%,
-          #26a69a 65%,
-          #42a5f5 75%,
-          #5c6bc0 85%,
-          #7e57c2 95%
-        )`,
+        backgroundImage: 'url(/wallpaper-sonoma.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
       onClick={() => {
         setSelectedFolder(null);
@@ -75,16 +73,7 @@ export default function Desktop() {
               handleDoubleClick(folder.id, folder.name);
             }}
           >
-            <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
-              <path
-                d="M4 8C4 5.79 5.79 4 8 4H22L26 8H48C50.21 8 52 9.79 52 12V40C52 42.21 50.21 44 48 44H8C5.79 44 4 42.21 4 40V8Z"
-                fill="#5AC8FA"
-              />
-              <path
-                d="M4 16H52V40C52 42.21 50.21 44 48 44H8C5.79 44 4 42.21 4 40V16Z"
-                fill="#40A9FF"
-              />
-            </svg>
+            <img src="/icons/folder.png" alt={folder.name} width={56} height={48} style={{ objectFit: 'contain' }} draggable={false} />
             <span className="desktop-icon-label">{folder.name}</span>
           </div>
         ))}
