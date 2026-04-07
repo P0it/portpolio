@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { profile } from '../../data/profile';
 
 const bookmarks = [
@@ -32,6 +32,8 @@ export default function Safari() {
   const [loading, setLoading] = useState(false);
   const [iframeError, setIframeError] = useState(false);
 
+  const loadTimerRef = useRef<number | null>(null);
+
   const navigate = useCallback((url: string) => {
     const normalized = normalizeUrl(url);
     if (!normalized) return;
@@ -39,6 +41,16 @@ export default function Safari() {
     setInputValue(normalized);
     setLoading(true);
     setIframeError(false);
+    // Most sites block iframes — if still loading after 3s, show error
+    if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
+    loadTimerRef.current = window.setTimeout(() => {
+      setLoading(false);
+      setIframeError(true);
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    return () => { if (loadTimerRef.current) clearTimeout(loadTimerRef.current); };
   }, []);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -150,8 +162,15 @@ export default function Safari() {
               className="w-full h-full border-none"
               title="Safari Browser"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              onLoad={() => setLoading(false)}
-              onError={() => { setLoading(false); setIframeError(true); }}
+              onLoad={() => {
+                if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
+                setLoading(false);
+              }}
+              onError={() => {
+                if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
+                setLoading(false);
+                setIframeError(true);
+              }}
             />
           )}
         </div>
