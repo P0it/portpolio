@@ -28,18 +28,18 @@ export default function VSCode() {
   return (
     <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar - File Explorer */}
-      <div className="w-[200px] border-r border-[#333] py-1" style={{ background: '#252526' }}>
-        <div className="text-[11px] uppercase tracking-wider text-white/40 px-4 py-2">Explorer</div>
-        <div className="text-[12px]">
-          <div className="px-4 py-0.5 text-white/60">▼ src</div>
-          <div className="px-6 py-0.5 text-white/60">  ▼ components</div>
-          <div className="px-8 py-0.5 text-white/90" style={{ background: '#37373d' }}>developer.tsx</div>
-          <div className="px-8 py-0.5 text-white/40">  portfolio.tsx</div>
-          <div className="px-8 py-0.5 text-white/40">  skills.ts</div>
-          <div className="px-6 py-0.5 text-white/60">  ▶ data</div>
-          <div className="px-6 py-0.5 text-white/60">  ▶ stores</div>
-          <div className="px-4 py-0.5 text-white/40">package.json</div>
-          <div className="px-4 py-0.5 text-white/40">tsconfig.json</div>
+      <div className="w-[220px] border-r border-[#333] py-2" style={{ background: '#252526' }}>
+        <div className="text-[11px] uppercase tracking-wider text-white/40 px-5 py-2">Explorer</div>
+        <div className="text-[13px]">
+          <div className="px-5 py-1 text-white/60">▼ src</div>
+          <div className="px-7 py-1 text-white/60">  ▼ components</div>
+          <div className="px-9 py-1 text-white/90" style={{ background: '#37373d' }}>developer.tsx</div>
+          <div className="px-9 py-1 text-white/40">  portfolio.tsx</div>
+          <div className="px-9 py-1 text-white/40">  skills.ts</div>
+          <div className="px-7 py-1 text-white/60">  ▶ data</div>
+          <div className="px-7 py-1 text-white/60">  ▶ stores</div>
+          <div className="px-5 py-1 text-white/40">package.json</div>
+          <div className="px-5 py-1 text-white/40">tsconfig.json</div>
         </div>
       </div>
 
@@ -47,19 +47,19 @@ export default function VSCode() {
       <div className="flex-1 flex flex-col">
         {/* Tabs */}
         <div className="flex border-b border-[#333]" style={{ background: '#252526' }}>
-          <div className="px-4 py-1.5 text-[12px] text-white/80 border-b-2 border-blue-500" style={{ background: '#1e1e1e' }}>
+          <div className="px-5 py-2 text-[13px] text-white/80 border-b-2 border-blue-500" style={{ background: '#1e1e1e' }}>
             developer.tsx
           </div>
-          <div className="px-4 py-1.5 text-[12px] text-white/40">
+          <div className="px-5 py-2 text-[13px] text-white/40">
             portfolio.tsx
           </div>
         </div>
 
         {/* Code */}
-        <div className="flex-1 overflow-y-auto font-mono text-[12px] leading-5 py-2">
+        <div className="flex-1 overflow-y-auto font-mono text-[13px] leading-6 py-3">
           {codeLines.map((line) => (
-            <div key={line.num} className="flex hover:bg-white/3 px-2">
-              <span className="w-10 text-right pr-4 select-none" style={{ color: '#858585' }}>
+            <div key={line.num} className="flex hover:bg-white/3 px-4">
+              <span className="w-12 text-right pr-5 select-none" style={{ color: '#858585' }}>
                 {line.num}
               </span>
               <span style={{ color: line.color || '#d4d4d4' }}>
@@ -70,7 +70,7 @@ export default function VSCode() {
         </div>
 
         {/* Status Bar */}
-        <div className="flex items-center justify-between px-3 py-0.5 text-[11px]" style={{ background: '#007acc', color: 'white' }}>
+        <div className="flex items-center justify-between px-5 py-1 text-[11px]" style={{ background: '#007acc', color: 'white' }}>
           <div className="flex items-center gap-3">
             <span>main</span>
             <span>0 errors</span>

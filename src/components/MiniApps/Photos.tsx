@@ -17,11 +17,11 @@ export default function Photos() {
   return (
     <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Toolbar */}
-      <div className="flex items-center justify-center gap-6 px-4 py-2 border-b border-white/10" style={{ background: 'rgba(45,45,45,0.95)' }}>
+      <div className="flex items-center justify-center gap-8 px-6 py-3 border-b border-white/10" style={{ background: 'rgba(45,45,45,0.95)' }}>
         {['Years', 'Months', 'Days', 'All Photos'].map((tab, i) => (
           <span
             key={tab}
-            className="text-[12px] px-2 py-0.5 rounded"
+            className="text-[13px] px-3 py-1 rounded"
             style={i === 3 ? { background: 'rgba(255,255,255,0.12)', color: 'white' } : { color: 'rgba(255,255,255,0.5)' }}
           >
             {tab}
@@ -30,22 +30,22 @@ export default function Photos() {
       </div>
 
       {/* Photo Grid */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="text-[11px] text-white/40 mb-2 px-1">My Tech Stack Gallery</div>
-        <div className="grid grid-cols-4 gap-2">
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="text-[12px] text-white/40 mb-3">My Tech Stack Gallery</div>
+        <div className="grid grid-cols-4 gap-3">
           {photos.map((photo) => (
             <div
               key={photo.label}
-              className="aspect-square rounded-sm flex flex-col items-center justify-center gap-1 hover:opacity-80 transition-opacity"
+              className="aspect-square rounded-lg flex flex-col items-center justify-center gap-2 hover:opacity-80 transition-opacity"
               style={{ background: photo.color + '33', cursor: 'default' }}
             >
-              <span className="text-3xl">{photo.icon}</span>
-              <span className="text-[10px] text-white/70">{photo.label}</span>
+              <span className="text-4xl">{photo.icon}</span>
+              <span className="text-[11px] text-white/70">{photo.label}</span>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-6 text-[11px] text-white/20">
+        <div className="text-center mt-8 text-[12px] text-white/20">
           {photos.length} Technologies · All Time
         </div>
       </div>
