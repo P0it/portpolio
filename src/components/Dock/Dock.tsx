@@ -106,7 +106,7 @@ export default function Dock() {
       title={app.name}
     >
       <motion.div
-        className="w-[48px] h-[48px] flex items-center justify-center"
+        className="w-[54px] h-[54px] flex items-center justify-center"
         animate={
           bouncingId === app.id
             ? { y: [0, -30, 0, -15, 0, -5, 0] }
@@ -121,7 +121,7 @@ export default function Dock() {
         <img
           src={app.icon}
           alt={app.name}
-          className="w-[46px] h-[46px] rounded-[11px]"
+          className="w-[50px] h-[50px] rounded-[12px]"
           style={{ objectFit: 'contain' }}
           draggable={false}
         />
@@ -134,11 +134,11 @@ export default function Dock() {
 
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-[9998]">
-      <div className="dock-container flex items-end gap-[2px]">
+      <div className="dock-container flex items-end" style={{ gap: 4 }}>
         {apps.map(renderIcon)}
 
         {/* Separator */}
-        <div className="w-[1px] h-[40px] bg-white/20 mx-1 self-center" />
+        <div className="self-center" style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.25)', margin: '0 6px' }} />
 
         {docItems.map(renderIcon)}
       </div>

@@ -16,7 +16,27 @@ interface Menu {
   items: MenuItem[];
 }
 
-function useMenus(): Menu[] {
+const appNames: Record<string, string> = {
+  finder: 'Finder',
+  'pdf-viewer': 'Preview',
+  iterm: 'iTerm2',
+  resume: 'Pages',
+  safari: 'Safari',
+  messages: 'Messages',
+  mail: 'Mail',
+  photos: 'Photos',
+  music: 'Music',
+  vscode: 'Code',
+};
+
+function useActiveApp(): string {
+  const windows = useWindowStore((s) => s.windows);
+  const sorted = [...windows].sort((a, b) => b.zIndex - a.zIndex);
+  const top = sorted.find((w) => w.isOpen && !w.isMinimized);
+  return top?.appId || 'finder';
+}
+
+function useMenus(activeApp: string): Menu[] {
   const { openWindow, windows } = useWindowStore();
 
   const openFinder = (path: string, title: string) => {
@@ -48,86 +68,290 @@ function useMenus(): Menu[] {
     if (top) useWindowStore.getState().maximizeWindow(top.id);
   };
 
-  return [
-    {
-      label: 'Finder',
-      bold: true,
-      items: [
-        { label: 'About Finder', bold: true },
+  const name = appNames[activeApp] || 'Finder';
+
+  // Common menus shared by most apps
+  const windowMenu: Menu = {
+    label: 'Window',
+    items: [
+      { label: 'Minimize', shortcut: '⌘M', action: minimizeTopWindow },
+      { label: 'Zoom', action: maximizeTopWindow },
+      { label: '', separator: true },
+      { label: 'Close Window', shortcut: '⌘W', action: closeTopWindow },
+    ],
+  };
+
+  const helpMenu: Menu = {
+    label: 'Help',
+    items: [
+      { label: `${name} Help` },
+      { label: '', separator: true },
+      { label: 'Portfolio by JUNG, HYUNWOO', disabled: true },
+      { label: 'Built with React + TypeScript', disabled: true },
+    ],
+  };
+
+  const editMenuDisabled: Menu = {
+    label: 'Edit',
+    items: [
+      { label: 'Undo', shortcut: '⌘Z', disabled: true },
+      { label: 'Redo', shortcut: '⇧⌘Z', disabled: true },
+      { label: '', separator: true },
+      { label: 'Cut', shortcut: '⌘X', disabled: true },
+      { label: 'Copy', shortcut: '⌘C', disabled: true },
+      { label: 'Paste', shortcut: '⌘V', disabled: true },
+      { label: 'Select All', shortcut: '⌘A', disabled: true },
+    ],
+  };
+
+  // App-specific menus
+  const appMenus: Record<string, Menu[]> = {
+    finder: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
         { label: '', separator: true },
         { label: 'Settings...', shortcut: '⌘,' },
         { label: '', separator: true },
-        { label: 'Hide Finder', shortcut: '⌘H' },
-        { label: 'Hide Others', shortcut: '⌥⌘H' },
-      ],
-    },
-    {
-      label: 'File',
-      items: [
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
         { label: 'New Finder Window', shortcut: '⌘N', action: () => openFinder('desktop', 'Desktop') },
         { label: '', separator: true },
         { label: 'Close Window', shortcut: '⌘W', action: closeTopWindow },
         { label: '', separator: true },
         { label: 'Get Info', shortcut: '⌘I' },
-      ],
-    },
-    {
-      label: 'Edit',
-      items: [
-        { label: 'Undo', shortcut: '⌘Z', disabled: true },
-        { label: 'Redo', shortcut: '⇧⌘Z', disabled: true },
-        { label: '', separator: true },
-        { label: 'Cut', shortcut: '⌘X', disabled: true },
-        { label: 'Copy', shortcut: '⌘C', disabled: true },
-        { label: 'Paste', shortcut: '⌘V', disabled: true },
-        { label: 'Select All', shortcut: '⌘A', disabled: true },
-      ],
-    },
-    {
-      label: 'View',
-      items: [
+      ]},
+      editMenuDisabled,
+      { label: 'View', items: [
         { label: 'as Icons', shortcut: '⌘1' },
         { label: 'as List', shortcut: '⌘2' },
         { label: 'as Columns', shortcut: '⌘3' },
-        { label: 'as Gallery', shortcut: '⌘4' },
         { label: '', separator: true },
         { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
-      ],
-    },
-    {
-      label: 'Go',
-      items: [
+      ]},
+      { label: 'Go', items: [
         { label: 'Desktop', shortcut: '⇧⌘D', action: () => openFinder('desktop', 'Desktop') },
         { label: 'Documents', shortcut: '⇧⌘O', action: () => openFinder('documents', 'Documents') },
         { label: 'Downloads', shortcut: '⌥⌘L', action: () => openFinder('downloads', 'Downloads') },
-      ],
-    },
-    {
-      label: 'Window',
-      items: [
-        { label: 'Minimize', shortcut: '⌘M', action: minimizeTopWindow },
-        { label: 'Zoom', action: maximizeTopWindow },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    safari: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
         { label: '', separator: true },
-        { label: 'Close Window', shortcut: '⌘W', action: closeTopWindow },
-      ],
-    },
-    {
-      label: 'Help',
-      items: [
-        { label: 'macOS Help' },
+        { label: 'Settings...', shortcut: '⌘,' },
         { label: '', separator: true },
-        { label: 'Portfolio by JUNG, HYUNWOO', disabled: true },
-        { label: 'Built with React + TypeScript', disabled: true },
-        { label: 'Powered by Claude Code', disabled: true },
-      ],
-    },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'New Window', shortcut: '⌘N' },
+        { label: 'New Tab', shortcut: '⌘T' },
+        { label: '', separator: true },
+        { label: 'Close Tab', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'View', items: [
+        { label: 'Show Reader', shortcut: '⇧⌘R' },
+        { label: 'Show Sidebar', shortcut: '⇧⌘L' },
+        { label: '', separator: true },
+        { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
+      ]},
+      { label: 'History', items: [
+        { label: 'Show All History', shortcut: '⌘Y' },
+        { label: '', separator: true },
+        { label: 'Recently Closed', disabled: true },
+      ]},
+      { label: 'Bookmarks', items: [
+        { label: 'Show Bookmarks', shortcut: '⌘B' },
+        { label: 'Add Bookmark...', shortcut: '⌘D' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    mail: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'New Message', shortcut: '⌘N' },
+        { label: '', separator: true },
+        { label: 'Close', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'View', items: [
+        { label: 'Show Mailbox List' },
+        { label: 'Show Favorites Bar', shortcut: '⇧⌘F' },
+        { label: '', separator: true },
+        { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
+      ]},
+      { label: 'Mailbox', items: [
+        { label: 'Get New Mail', shortcut: '⇧⌘N' },
+        { label: '', separator: true },
+        { label: 'Inbox' },
+        { label: 'Sent' },
+        { label: 'Drafts' },
+        { label: 'Trash' },
+      ]},
+      { label: 'Message', items: [
+        { label: 'Reply', shortcut: '⌘R' },
+        { label: 'Reply All', shortcut: '⇧⌘R' },
+        { label: 'Forward', shortcut: '⇧⌘F' },
+        { label: '', separator: true },
+        { label: 'Mark as Read', shortcut: '⌘⇧U' },
+        { label: 'Move to Trash', shortcut: '⌘⌫' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    messages: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'New Message', shortcut: '⌘N' },
+        { label: '', separator: true },
+        { label: 'Close', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'Conversation', items: [
+        { label: 'Send', shortcut: '↩' },
+        { label: '', separator: true },
+        { label: 'Delete Conversation...' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    music: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'New Playlist', shortcut: '⌘N' },
+        { label: '', separator: true },
+        { label: 'Close', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'Controls', items: [
+        { label: 'Play / Pause', shortcut: 'Space' },
+        { label: 'Next', shortcut: '⌘→' },
+        { label: 'Previous', shortcut: '⌘←' },
+        { label: '', separator: true },
+        { label: 'Increase Volume', shortcut: '⌘↑' },
+        { label: 'Decrease Volume', shortcut: '⌘↓' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    vscode: [
+      { label: name, bold: true, items: [
+        { label: `About Visual Studio Code`, bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'New File', shortcut: '⌘N' },
+        { label: 'Open File...', shortcut: '⌘O' },
+        { label: '', separator: true },
+        { label: 'Save', shortcut: '⌘S' },
+        { label: 'Save As...', shortcut: '⇧⌘S' },
+        { label: '', separator: true },
+        { label: 'Close Editor', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'Selection', items: [
+        { label: 'Select All', shortcut: '⌘A' },
+        { label: 'Expand Selection', shortcut: '⇧⌥→' },
+        { label: 'Shrink Selection', shortcut: '⇧⌥←' },
+      ]},
+      { label: 'View', items: [
+        { label: 'Command Palette...', shortcut: '⇧⌘P' },
+        { label: 'Explorer', shortcut: '⇧⌘E' },
+        { label: 'Search', shortcut: '⇧⌘F' },
+        { label: 'Terminal', shortcut: '⌃`' },
+        { label: '', separator: true },
+        { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
+      ]},
+      { label: 'Go', items: [
+        { label: 'Go to File...', shortcut: '⌘P' },
+        { label: 'Go to Line...', shortcut: '⌃G' },
+        { label: 'Go to Symbol...', shortcut: '⇧⌘O' },
+      ]},
+      { label: 'Terminal', items: [
+        { label: 'New Terminal', shortcut: '⌃`' },
+        { label: 'Split Terminal' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+    photos: [
+      { label: name, bold: true, items: [
+        { label: `About ${name}`, bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: `Hide ${name}`, shortcut: '⌘H' },
+      ]},
+      { label: 'File', items: [
+        { label: 'Import...', shortcut: '⇧⌘I' },
+        { label: '', separator: true },
+        { label: 'Close', shortcut: '⌘W', action: closeTopWindow },
+      ]},
+      editMenuDisabled,
+      { label: 'Image', items: [
+        { label: 'Rotate Clockwise', shortcut: '⌘R' },
+        { label: 'Rotate Counter Clockwise', shortcut: '⌥⌘R' },
+        { label: '', separator: true },
+        { label: 'Duplicate', shortcut: '⌘D' },
+      ]},
+      windowMenu,
+      helpMenu,
+    ],
+  };
+
+  // Default menu for apps without specific menus
+  const defaultMenus: Menu[] = [
+    { label: name, bold: true, items: [
+      { label: `About ${name}`, bold: true },
+      { label: '', separator: true },
+      { label: 'Settings...', shortcut: '⌘,' },
+      { label: '', separator: true },
+      { label: `Hide ${name}`, shortcut: '⌘H' },
+    ]},
+    { label: 'File', items: [
+      { label: 'Close', shortcut: '⌘W', action: closeTopWindow },
+    ]},
+    editMenuDisabled,
+    { label: 'View', items: [
+      { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
+    ]},
+    windowMenu,
+    helpMenu,
   ];
+
+  return appMenus[activeApp] || defaultMenus;
 }
 
 export default function MenuBar() {
   const [time, setTime] = useState(new Date());
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const menus = useMenus();
+  const activeApp = useActiveApp();
+  const menus = useMenus(activeApp);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -141,6 +365,11 @@ export default function MenuBar() {
       return () => window.removeEventListener('click', handler);
     }
   }, [openMenu]);
+
+  // Close menu when active app changes
+  useEffect(() => {
+    setOpenMenu(null);
+  }, [activeApp]);
 
   const toggleMenu = useCallback((label: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -195,7 +424,7 @@ export default function MenuBar() {
           )}
         </div>
 
-        {/* App Menus */}
+        {/* App Menus — changes based on active app */}
         {menus.map((menu) => (
           <div key={menu.label} className="relative">
             <button
