@@ -32,7 +32,7 @@ const apps: DockApp[] = [
   },
   { id: 'safari', name: 'Safari', icon: '/icons/safari.png', action: 'window', appId: 'safari', windowConfig: { title: 'Safari', size: { width: 850, height: 550 } } },
   { id: 'messages', name: 'Messages', icon: '/icons/messages.png', action: 'window', appId: 'messages', windowConfig: { title: 'Messages', size: { width: 700, height: 480 } } },
-  { id: 'mail', name: 'Mail', icon: '/icons/mail.png', action: 'window', appId: 'mail', windowConfig: { title: 'Mail', size: { width: 800, height: 500 } } },
+  { id: 'mail', name: 'Mail', icon: '/icons/mail.png', action: 'window', appId: 'mail', windowConfig: { title: 'Mail', size: { width: 1050, height: 600 } } },
   { id: 'photos', name: 'Photos', icon: '/icons/photos.png', action: 'window', appId: 'photos', windowConfig: { title: 'Photos', size: { width: 650, height: 500 } } },
   { id: 'music', name: 'Music', icon: '/icons/music.png', action: 'window', appId: 'music', windowConfig: { title: 'Music', size: { width: 500, height: 600 } } },
   { id: 'vscode', name: 'Visual Studio Code', icon: '/icons/vscode.png', action: 'window', appId: 'vscode', windowConfig: { title: 'Visual Studio Code', size: { width: 900, height: 600 } } },
