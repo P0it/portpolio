@@ -32,25 +32,27 @@ export default function Messages() {
   return (
     <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar */}
-      <div className="w-[240px] shrink-0 border-r border-white/10 pt-4 px-3" style={{ background: 'rgba(45,45,45,0.9)' }}>
-        <div className="text-[10px] font-semibold uppercase text-white/30 px-3 mb-2">Messages</div>
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ background: 'rgba(0,110,255,0.5)' }}>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-sm text-white font-bold shrink-0">V</div>
-          <div className="min-w-0">
-            <div className="text-[13px] text-white font-medium">Visitor</div>
-            <div className="text-[11px] text-white/50 truncate">Nice portfolio 👋</div>
+      <div className="w-[240px] shrink-0 border-r border-white/10" style={{ background: 'rgba(45,45,45,0.9)' }}>
+        <div style={{ padding: '16px 16px 8px' }}>
+          <div className="text-[10px] font-semibold uppercase text-white/30 mb-3" style={{ paddingLeft: 4 }}>Messages</div>
+          <div className="flex items-center gap-3 rounded-xl" style={{ background: 'rgba(0,110,255,0.5)', padding: '10px 12px' }}>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-sm text-white font-bold shrink-0">V</div>
+            <div className="min-w-0">
+              <div className="text-[13px] text-white font-medium">Visitor</div>
+              <div className="text-[11px] text-white/50 truncate">Nice portfolio 👋</div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Chat Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-5">
+        <div className="flex-1 overflow-y-auto flex flex-col gap-5" style={{ padding: '24px 32px' }}>
           {conversation.slice(0, visibleCount).map((msg, i) => (
             <div key={i} className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}>
               <div
                 style={{
-                  maxWidth: '70%',
+                  maxWidth: '65%',
                   padding: '12px 20px',
                   borderRadius: 20,
                   fontSize: 15,
@@ -75,8 +77,8 @@ export default function Messages() {
         </div>
 
         {/* Input */}
-        <div className="px-6 py-4 border-t border-white/10">
-          <div className="px-5 py-3 rounded-full text-[13px] text-white/30" style={{ background: 'rgba(255,255,255,0.08)' }}>
+        <div className="border-t border-white/10" style={{ padding: '14px 24px' }}>
+          <div className="rounded-full text-[13px] text-white/30" style={{ background: 'rgba(255,255,255,0.08)', padding: '10px 20px' }}>
             iMessage
           </div>
         </div>
