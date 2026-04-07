@@ -58,15 +58,17 @@ export default function VSCode() {
     <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar - File Explorer */}
       <div className="w-[240px] border-r border-[#333] shrink-0" style={{ background: '#252526' }}>
-        <div className="text-[11px] uppercase tracking-wider text-white/40 px-4 pt-3 pb-2">Explorer</div>
-        <div className="text-[13px] leading-relaxed">
+        <div className="text-[11px] uppercase tracking-wider text-white/40" style={{ padding: '14px 20px 8px' }}>Explorer</div>
+        <div className="text-[13px]" style={{ lineHeight: 1.8 }}>
           {files.map((f, i) => (
             <div
               key={i}
-              className="flex items-center py-[3px] hover:bg-white/5"
+              className="flex items-center hover:bg-white/5"
               style={{
-                paddingLeft: 16 + f.indent * 16,
-                paddingRight: 12,
+                paddingLeft: 20 + f.indent * 16,
+                paddingRight: 16,
+                paddingTop: 2,
+                paddingBottom: 2,
                 background: f.active ? '#37373d' : undefined,
                 color: f.active ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.55)',
               }}
@@ -83,23 +85,23 @@ export default function VSCode() {
         {/* Tabs */}
         <div className="flex border-b border-[#333] shrink-0" style={{ background: '#252526' }}>
           <div
-            className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/80 border-b-2 border-blue-500 shrink-0"
-            style={{ background: '#1e1e1e' }}
+            className="flex items-center text-[13px] text-white/80 border-b-2 border-blue-500 shrink-0"
+            style={{ background: '#1e1e1e', padding: '8px 16px', gap: 8 }}
           >
             <span style={{ fontSize: 12 }}>📄</span>
             <span>developer.tsx</span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/40 shrink-0">
+          <div className="flex items-center text-[13px] text-white/40 shrink-0" style={{ padding: '8px 16px', gap: 8 }}>
             <span style={{ fontSize: 12 }}>📄</span>
             <span>portfolio.tsx</span>
           </div>
         </div>
 
         {/* Code */}
-        <div className="flex-1 overflow-y-auto font-mono text-[13px] leading-7 py-3">
+        <div className="flex-1 overflow-y-auto font-mono text-[13px]" style={{ lineHeight: 1.8, padding: '12px 0' }}>
           {codeLines.map((line) => (
-            <div key={line.num} className="flex hover:bg-white/3 px-3">
-              <span className="w-10 text-right pr-4 select-none shrink-0" style={{ color: '#858585' }}>
+            <div key={line.num} className="flex hover:bg-white/3" style={{ padding: '0 16px' }}>
+              <span className="text-right select-none shrink-0" style={{ color: '#858585', width: 44, paddingRight: 20 }}>
                 {line.num}
               </span>
               <span className="whitespace-pre" style={{ color: line.color || '#d4d4d4' }}>
@@ -111,10 +113,10 @@ export default function VSCode() {
 
         {/* Status Bar */}
         <div
-          className="flex items-center justify-between px-4 py-1 text-[11px] shrink-0 whitespace-nowrap overflow-hidden"
-          style={{ background: '#007acc', color: 'white' }}
+          className="flex items-center justify-between text-[11px] shrink-0 whitespace-nowrap overflow-hidden"
+          style={{ background: '#007acc', color: 'white', padding: '4px 20px' }}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center" style={{ gap: 16 }}>
             <span>main</span>
             <span>0 errors</span>
             <span>0 warnings</span>

@@ -18,8 +18,8 @@ export default function Safari() {
   return (
     <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* URL Bar */}
-      <div className="flex items-center gap-3 px-5 py-3" style={{ background: 'rgba(45,45,45,0.95)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}>
-        <div className="flex-1 flex items-center px-4 py-1.5 rounded-lg text-[13px]" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.5)' }}>
+      <div className="flex items-center shrink-0" style={{ background: 'rgba(45,45,45,0.95)', borderBottom: '0.5px solid rgba(255,255,255,0.08)', padding: '10px 20px' }}>
+        <div className="flex-1 flex items-center rounded-lg text-[13px]" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.5)', padding: '8px 16px' }}>
           <span style={{ marginRight: 8 }}>🔒</span>
           <span>{url}</span>
         </div>

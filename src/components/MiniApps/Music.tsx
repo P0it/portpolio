@@ -37,7 +37,7 @@ export default function Music() {
   return (
     <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
       {/* Now Playing */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8">
+      <div className="flex-1 flex flex-col items-center justify-center" style={{ padding: '24px 32px' }}>
         {/* Album Art */}
         <div
           className="w-48 h-48 rounded-lg mb-6 flex items-center justify-center"
@@ -91,16 +91,16 @@ export default function Music() {
       </div>
 
       {/* Playlist */}
-      <div className="border-t border-white/10 max-h-[150px] overflow-y-auto">
+      <div className="border-t border-white/10 overflow-y-auto" style={{ maxHeight: 160 }}>
         {playlist.map((t, i) => (
           <div
             key={i}
-            className="flex items-center px-4 py-2 hover:bg-white/5 transition-colors"
-            style={{ cursor: 'default', background: i === currentTrack ? 'rgba(255,255,255,0.05)' : undefined }}
+            className="flex items-center hover:bg-white/5 transition-colors"
+            style={{ padding: '10px 24px', cursor: 'default', background: i === currentTrack ? 'rgba(255,255,255,0.05)' : undefined }}
             onClick={() => { setCurrentTrack(i); setProgress(0); }}
           >
-            <span className="w-5 text-[11px] text-white/30">{i === currentTrack && isPlaying ? '♪' : i + 1}</span>
-            <div className="flex-1 ml-3">
+            <span className="text-[11px] text-white/30" style={{ width: 20 }}>{i === currentTrack && isPlaying ? '♪' : i + 1}</span>
+            <div className="flex-1" style={{ marginLeft: 12 }}>
               <div className={`text-[12px] ${i === currentTrack ? 'text-blue-400' : 'text-white/80'}`}>{t.title}</div>
               <div className="text-[10px] text-white/40">{t.artist}</div>
             </div>
