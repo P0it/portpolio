@@ -155,8 +155,12 @@ export default function Dock() {
         <img
           src={app.icon}
           alt={app.name}
-          className="w-[50px] h-[50px] rounded-[12px]"
-          style={{ objectFit: 'contain' }}
+          className="rounded-[12px]"
+          style={{
+            width: ['vscode', 'github', 'iterm'].includes(app.id) ? 54 : 50,
+            height: ['vscode', 'github', 'iterm'].includes(app.id) ? 54 : 50,
+            objectFit: 'contain',
+          }}
           draggable={false}
         />
       </motion.div>
