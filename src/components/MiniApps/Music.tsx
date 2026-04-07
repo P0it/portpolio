@@ -35,7 +35,7 @@ export default function Music() {
   const track = playlist[currentTrack];
 
   return (
-    <div className="h-full flex flex-col" style={{ background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+    <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
       {/* Now Playing */}
       <div className="flex-1 flex flex-col items-center justify-center px-8">
         {/* Album Art */}

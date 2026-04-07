@@ -15,7 +15,7 @@ const photos = [
 
 export default function Photos() {
   return (
-    <div className="h-full flex flex-col" style={{ background: '#1e1e1e' }}>
+    <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Toolbar */}
       <div className="flex items-center justify-center gap-6 px-4 py-2 border-b border-white/10" style={{ background: 'rgba(45,45,45,0.95)' }}>
         {['Years', 'Months', 'Days', 'All Photos'].map((tab, i) => (
@@ -30,9 +30,9 @@ export default function Photos() {
       </div>
 
       {/* Photo Grid */}
-      <div className="flex-1 overflow-y-auto p-3">
+      <div className="flex-1 overflow-y-auto p-4">
         <div className="text-[11px] text-white/40 mb-2 px-1">My Tech Stack Gallery</div>
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-4 gap-2">
           {photos.map((photo) => (
             <div
               key={photo.label}

@@ -16,7 +16,7 @@ export default function Safari() {
   const [url, setUrl] = useState('about:favorites');
 
   return (
-    <div className="h-full flex flex-col" style={{ background: '#1e1e1e' }}>
+    <div className="h-full flex flex-col rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* URL Bar */}
       <div className="flex items-center gap-2 px-3 py-2" style={{ background: 'rgba(45,45,45,0.95)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}>
         <div className="flex-1 flex items-center px-3 py-1 rounded-md text-[12px]" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.5)' }}>

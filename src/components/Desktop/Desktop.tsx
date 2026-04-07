@@ -49,34 +49,27 @@ export default function Desktop() {
       }}
       onContextMenu={handleContextMenu}
     >
-      {/* Desktop Icon Grid - positioned top-right, column-first */}
-      <div
-        className="absolute top-8 right-2 grid gap-1"
-        style={{
-          gridAutoFlow: 'column',
-          gridTemplateRows: 'repeat(auto-fill, 90px)',
-          maxHeight: 'calc(100vh - 100px)',
-          direction: 'rtl',
-        }}
-      >
-        {desktopFolders.map((folder) => (
-          <div
-            key={folder.id}
-            className={`desktop-icon ${selectedFolder === folder.id ? 'selected' : ''}`}
-            style={{ direction: 'ltr' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedFolder(folder.id);
-            }}
-            onDoubleClick={(e) => {
-              e.stopPropagation();
-              handleDoubleClick(folder.id, folder.name);
-            }}
-          >
-            <img src="/icons/folder.png" alt={folder.name} width={56} height={48} style={{ objectFit: 'contain' }} draggable={false} />
-            <span className="desktop-icon-label">{folder.name}</span>
-          </div>
-        ))}
+      {/* Desktop Folders - centered, horizontal row */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="flex gap-6 pointer-events-auto">
+          {desktopFolders.map((folder) => (
+            <div
+              key={folder.id}
+              className={`desktop-icon ${selectedFolder === folder.id ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedFolder(folder.id);
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                handleDoubleClick(folder.id, folder.name);
+              }}
+            >
+              <img src="/icons/folder.png" alt={folder.name} width={64} height={54} style={{ objectFit: 'contain' }} draggable={false} />
+              <span className="desktop-icon-label">{folder.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Context Menu */}

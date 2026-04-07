@@ -26,9 +26,9 @@ const codeLines = [
 
 export default function VSCode() {
   return (
-    <div className="h-full flex" style={{ background: '#1e1e1e' }}>
+    <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar - File Explorer */}
-      <div className="w-[200px] border-r border-[#333]" style={{ background: '#252526' }}>
+      <div className="w-[200px] border-r border-[#333] py-1" style={{ background: '#252526' }}>
         <div className="text-[11px] uppercase tracking-wider text-white/40 px-4 py-2">Explorer</div>
         <div className="text-[12px]">
           <div className="px-4 py-0.5 text-white/60">▼ src</div>
@@ -56,9 +56,9 @@ export default function VSCode() {
         </div>
 
         {/* Code */}
-        <div className="flex-1 overflow-y-auto font-mono text-[12px] leading-5">
+        <div className="flex-1 overflow-y-auto font-mono text-[12px] leading-5 py-2">
           {codeLines.map((line) => (
-            <div key={line.num} className="flex hover:bg-white/3">
+            <div key={line.num} className="flex hover:bg-white/3 px-2">
               <span className="w-10 text-right pr-4 select-none" style={{ color: '#858585' }}>
                 {line.num}
               </span>

@@ -30,7 +30,7 @@ export default function Messages() {
   }, [visibleCount]);
 
   return (
-    <div className="h-full flex" style={{ background: '#1e1e1e' }}>
+    <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar */}
       <div className="w-[200px] border-r border-white/10 p-3" style={{ background: 'rgba(45,45,45,0.9)' }}>
         <div className="flex items-center gap-3 p-2 rounded-lg" style={{ background: 'rgba(0,110,255,0.5)' }}>

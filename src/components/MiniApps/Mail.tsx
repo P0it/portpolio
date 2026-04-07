@@ -47,7 +47,7 @@ const emails = [
 
 export default function Mail() {
   return (
-    <div className="h-full flex" style={{ background: '#1e1e1e' }}>
+    <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar */}
       <div className="w-[180px] border-r border-white/10 p-3" style={{ background: 'rgba(45,45,45,0.9)' }}>
         <div className="text-[10px] font-semibold uppercase text-white/40 mb-2 px-2">Mailboxes</div>
