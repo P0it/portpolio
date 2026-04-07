@@ -101,10 +101,44 @@ export default function Dock() {
   const renderIcon = (app: DockApp) => (
     <div
       key={app.id}
-      className="dock-item flex flex-col items-center cursor-default"
+      className="dock-item flex flex-col items-center cursor-default relative group"
       onClick={() => handleClick(app)}
-      title={app.name}
     >
+      {/* Tooltip */}
+      <div
+        className="absolute pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{
+          bottom: '100%',
+          marginBottom: 6,
+          background: 'rgba(30,30,30,0.9)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: 6,
+          padding: '4px 10px',
+          fontSize: 12,
+          color: 'rgba(255,255,255,0.9)',
+          whiteSpace: 'nowrap',
+          border: '0.5px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+        }}
+      >
+        {app.name}
+        {/* Tooltip arrow */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2"
+          style={{
+            bottom: -4,
+            width: 8,
+            height: 8,
+            background: 'rgba(30,30,30,0.9)',
+            transform: 'translateX(-50%) rotate(45deg)',
+            border: '0.5px solid rgba(255,255,255,0.15)',
+            borderTop: 'none',
+            borderLeft: 'none',
+          }}
+        />
+      </div>
+
       <motion.div
         className="w-[54px] h-[54px] flex items-center justify-center"
         animate={

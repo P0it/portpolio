@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import MenuBar from './components/MenuBar/MenuBar';
 import Desktop from './components/Desktop/Desktop';
 import Dock from './components/Dock/Dock';
@@ -13,6 +13,8 @@ import Mail from './components/MiniApps/Mail';
 import Photos from './components/MiniApps/Photos';
 import Music from './components/MiniApps/Music';
 import VSCode from './components/MiniApps/VSCode';
+import BootScreen from './components/BootScreen/BootScreen';
+import NotificationCenter from './components/Notification/Notification';
 import { useWindowStore } from './stores/windowStore';
 
 function getTopWindow() {
@@ -23,28 +25,33 @@ function getTopWindow() {
 
 export default function App() {
   const windows = useWindowStore((s) => s.windows);
+  const [booted, setBooted] = useState(false);
 
   // Global keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      // Escape — close top window
       if (e.key === 'Escape') {
         const top = getTopWindow();
         if (top) useWindowStore.getState().closeWindow(top.id);
       }
     };
-
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
   return (
     <div className="w-screen h-screen overflow-hidden">
+      {/* Boot & Login Screen */}
+      {!booted && <BootScreen onComplete={() => setBooted(true)} />}
+
       {/* Desktop Background + Icons */}
       <Desktop />
 
       {/* Menu Bar */}
       <MenuBar />
+
+      {/* Notifications */}
+      {booted && <NotificationCenter />}
 
       {/* Windows */}
       {windows.map((win) => (
