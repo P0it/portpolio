@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useWindowStore } from '../../stores/windowStore';
 
 interface MenuItem {
   label: string;
@@ -6,6 +7,7 @@ interface MenuItem {
   separator?: boolean;
   disabled?: boolean;
   bold?: boolean;
+  action?: () => void;
 }
 
 interface Menu {
@@ -14,104 +16,118 @@ interface Menu {
   items: MenuItem[];
 }
 
-const menus: Menu[] = [
-  {
-    label: 'Finder',
-    bold: true,
-    items: [
-      { label: 'About Finder', bold: true },
-      { label: '', separator: true },
-      { label: 'Settings...', shortcut: '⌘,' },
-      { label: '', separator: true },
-      { label: 'Empty Trash...', shortcut: '⇧⌘⌫' },
-      { label: '', separator: true },
-      { label: 'Hide Finder', shortcut: '⌘H' },
-      { label: 'Hide Others', shortcut: '⌥⌘H' },
-    ],
-  },
-  {
-    label: 'File',
-    items: [
-      { label: 'New Finder Window', shortcut: '⌘N' },
-      { label: 'New Folder', shortcut: '⇧⌘N' },
-      { label: 'New Tab', shortcut: '⌘T' },
-      { label: '', separator: true },
-      { label: 'Open', shortcut: '⌘O' },
-      { label: 'Close Window', shortcut: '⌘W' },
-      { label: '', separator: true },
-      { label: 'Get Info', shortcut: '⌘I' },
-      { label: 'Rename' },
-      { label: '', separator: true },
-      { label: 'Move to Trash', shortcut: '⌘⌫' },
-    ],
-  },
-  {
-    label: 'Edit',
-    items: [
-      { label: 'Undo', shortcut: '⌘Z' },
-      { label: 'Redo', shortcut: '⇧⌘Z' },
-      { label: '', separator: true },
-      { label: 'Cut', shortcut: '⌘X' },
-      { label: 'Copy', shortcut: '⌘C' },
-      { label: 'Paste', shortcut: '⌘V' },
-      { label: 'Select All', shortcut: '⌘A' },
-      { label: '', separator: true },
-      { label: 'Find...', shortcut: '⌘F' },
-    ],
-  },
-  {
-    label: 'View',
-    items: [
-      { label: 'as Icons', shortcut: '⌘1' },
-      { label: 'as List', shortcut: '⌘2' },
-      { label: 'as Columns', shortcut: '⌘3' },
-      { label: 'as Gallery', shortcut: '⌘4' },
-      { label: '', separator: true },
-      { label: 'Show Path Bar', shortcut: '⌥⌘P' },
-      { label: 'Show Status Bar', shortcut: '⌘/' },
-      { label: 'Show Sidebar', shortcut: '⌥⌘S' },
-      { label: '', separator: true },
-      { label: 'Enter Full Screen', shortcut: '⌃⌘F' },
-    ],
-  },
-  {
-    label: 'Go',
-    items: [
-      { label: 'Back', shortcut: '⌘[' },
-      { label: 'Forward', shortcut: '⌘]' },
-      { label: '', separator: true },
-      { label: 'Recents', shortcut: '⇧⌘F' },
-      { label: 'Documents', shortcut: '⇧⌘O' },
-      { label: 'Desktop', shortcut: '⇧⌘D' },
-      { label: 'Downloads', shortcut: '⌥⌘L' },
-      { label: 'Home', shortcut: '⇧⌘H' },
-      { label: '', separator: true },
-      { label: 'Go to Folder...', shortcut: '⇧⌘G' },
-    ],
-  },
-  {
-    label: 'Window',
-    items: [
-      { label: 'Minimize', shortcut: '⌘M' },
-      { label: 'Zoom' },
-      { label: '', separator: true },
-      { label: 'Bring All to Front' },
-    ],
-  },
-  {
-    label: 'Help',
-    items: [
-      { label: 'macOS Help' },
-      { label: '', separator: true },
-      { label: 'This is a portfolio by JUNG, HYUNWOO', disabled: true },
-      { label: 'Built with React + TypeScript', disabled: true },
-    ],
-  },
-];
+function useMenus(): Menu[] {
+  const { openWindow, windows } = useWindowStore();
+
+  const openFinder = (path: string, title: string) => {
+    openWindow({
+      id: `finder-${path}`,
+      appId: 'finder',
+      title,
+      position: { x: Math.round((window.innerWidth - 800) / 2), y: Math.round((window.innerHeight - 500) / 2) - 20 },
+      size: { width: 800, height: 500 },
+      props: { currentPath: path },
+    });
+  };
+
+  const closeTopWindow = () => {
+    const sorted = [...windows].sort((a, b) => b.zIndex - a.zIndex);
+    const top = sorted.find((w) => w.isOpen && !w.isMinimized);
+    if (top) useWindowStore.getState().closeWindow(top.id);
+  };
+
+  const minimizeTopWindow = () => {
+    const sorted = [...windows].sort((a, b) => b.zIndex - a.zIndex);
+    const top = sorted.find((w) => w.isOpen && !w.isMinimized);
+    if (top) useWindowStore.getState().minimizeWindow(top.id);
+  };
+
+  const maximizeTopWindow = () => {
+    const sorted = [...windows].sort((a, b) => b.zIndex - a.zIndex);
+    const top = sorted.find((w) => w.isOpen && !w.isMinimized);
+    if (top) useWindowStore.getState().maximizeWindow(top.id);
+  };
+
+  return [
+    {
+      label: 'Finder',
+      bold: true,
+      items: [
+        { label: 'About Finder', bold: true },
+        { label: '', separator: true },
+        { label: 'Settings...', shortcut: '⌘,' },
+        { label: '', separator: true },
+        { label: 'Hide Finder', shortcut: '⌘H' },
+        { label: 'Hide Others', shortcut: '⌥⌘H' },
+      ],
+    },
+    {
+      label: 'File',
+      items: [
+        { label: 'New Finder Window', shortcut: '⌘N', action: () => openFinder('desktop', 'Desktop') },
+        { label: '', separator: true },
+        { label: 'Close Window', shortcut: '⌘W', action: closeTopWindow },
+        { label: '', separator: true },
+        { label: 'Get Info', shortcut: '⌘I' },
+      ],
+    },
+    {
+      label: 'Edit',
+      items: [
+        { label: 'Undo', shortcut: '⌘Z', disabled: true },
+        { label: 'Redo', shortcut: '⇧⌘Z', disabled: true },
+        { label: '', separator: true },
+        { label: 'Cut', shortcut: '⌘X', disabled: true },
+        { label: 'Copy', shortcut: '⌘C', disabled: true },
+        { label: 'Paste', shortcut: '⌘V', disabled: true },
+        { label: 'Select All', shortcut: '⌘A', disabled: true },
+      ],
+    },
+    {
+      label: 'View',
+      items: [
+        { label: 'as Icons', shortcut: '⌘1' },
+        { label: 'as List', shortcut: '⌘2' },
+        { label: 'as Columns', shortcut: '⌘3' },
+        { label: 'as Gallery', shortcut: '⌘4' },
+        { label: '', separator: true },
+        { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: maximizeTopWindow },
+      ],
+    },
+    {
+      label: 'Go',
+      items: [
+        { label: 'Desktop', shortcut: '⇧⌘D', action: () => openFinder('desktop', 'Desktop') },
+        { label: 'Documents', shortcut: '⇧⌘O', action: () => openFinder('documents', 'Documents') },
+        { label: 'Downloads', shortcut: '⌥⌘L', action: () => openFinder('downloads', 'Downloads') },
+      ],
+    },
+    {
+      label: 'Window',
+      items: [
+        { label: 'Minimize', shortcut: '⌘M', action: minimizeTopWindow },
+        { label: 'Zoom', action: maximizeTopWindow },
+        { label: '', separator: true },
+        { label: 'Close Window', shortcut: '⌘W', action: closeTopWindow },
+      ],
+    },
+    {
+      label: 'Help',
+      items: [
+        { label: 'macOS Help' },
+        { label: '', separator: true },
+        { label: 'Portfolio by JUNG, HYUNWOO', disabled: true },
+        { label: 'Built with React + TypeScript', disabled: true },
+        { label: 'Powered by Claude Code', disabled: true },
+      ],
+    },
+  ];
+}
 
 export default function MenuBar() {
   const [time, setTime] = useState(new Date());
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const menus = useMenus();
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -134,6 +150,12 @@ export default function MenuBar() {
   const handleMenuHover = useCallback((label: string) => {
     if (openMenu) setOpenMenu(label);
   }, [openMenu]);
+
+  const handleItemClick = useCallback((item: MenuItem) => {
+    if (item.disabled) return;
+    if (item.action) item.action();
+    setOpenMenu(null);
+  }, []);
 
   const formattedTime = time.toLocaleString('en-US', {
     weekday: 'short',
@@ -163,9 +185,6 @@ export default function MenuBar() {
               <div className="context-menu-item font-semibold">About This Mac</div>
               <div className="context-menu-separator" />
               <div className="context-menu-item">System Settings...</div>
-              <div className="context-menu-item">App Store...</div>
-              <div className="context-menu-separator" />
-              <div className="context-menu-item">Recent Items</div>
               <div className="context-menu-separator" />
               <div className="context-menu-item">Force Quit...</div>
               <div className="context-menu-separator" />
@@ -202,7 +221,7 @@ export default function MenuBar() {
                   ) : (
                     <div
                       key={i}
-                      className={`context-menu-item ${item.disabled ? '' : ''}`}
+                      className="context-menu-item"
                       style={{
                         fontWeight: item.bold ? 600 : 400,
                         opacity: item.disabled ? 0.4 : 1,
@@ -210,6 +229,10 @@ export default function MenuBar() {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleItemClick(item);
                       }}
                     >
                       <span>{item.label}</span>

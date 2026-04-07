@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import MenuBar from './components/MenuBar/MenuBar';
 import Desktop from './components/Desktop/Desktop';
 import Dock from './components/Dock/Dock';
@@ -14,8 +15,69 @@ import Music from './components/MiniApps/Music';
 import VSCode from './components/MiniApps/VSCode';
 import { useWindowStore } from './stores/windowStore';
 
+function getTopWindow() {
+  const { windows } = useWindowStore.getState();
+  const sorted = [...windows].sort((a, b) => b.zIndex - a.zIndex);
+  return sorted.find((w) => w.isOpen && !w.isMinimized);
+}
+
 export default function App() {
   const windows = useWindowStore((s) => s.windows);
+
+  // Global keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const meta = e.metaKey || e.ctrlKey;
+
+      // Cmd+W — close top window
+      if (meta && e.key === 'w') {
+        e.preventDefault();
+        const top = getTopWindow();
+        if (top) useWindowStore.getState().closeWindow(top.id);
+      }
+
+      // Cmd+M — minimize top window
+      if (meta && e.key === 'm') {
+        e.preventDefault();
+        const top = getTopWindow();
+        if (top) useWindowStore.getState().minimizeWindow(top.id);
+      }
+
+      // Cmd+N — new Finder window
+      if (meta && e.key === 'n') {
+        e.preventDefault();
+        useWindowStore.getState().openWindow({
+          id: `finder-desktop-${Date.now()}`,
+          appId: 'finder',
+          title: 'Desktop',
+          position: { x: Math.round((window.innerWidth - 800) / 2), y: Math.round((window.innerHeight - 500) / 2) - 20 },
+          size: { width: 800, height: 500 },
+          props: { currentPath: 'desktop' },
+        });
+      }
+
+      // Escape — close top window
+      if (e.key === 'Escape') {
+        const top = getTopWindow();
+        if (top) useWindowStore.getState().closeWindow(top.id);
+      }
+
+      // Cmd+Space — open Spotlight (iTerm as substitute)
+      if (meta && e.key === ' ') {
+        e.preventDefault();
+        useWindowStore.getState().openWindow({
+          id: 'iterm-main',
+          appId: 'iterm',
+          title: 'hyunwoo@portfolio ~ %',
+          position: { x: Math.round((window.innerWidth - 750) / 2), y: Math.round((window.innerHeight - 620) / 2) - 20 },
+          size: { width: 750, height: 620 },
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   return (
     <div className="w-screen h-screen overflow-hidden">
