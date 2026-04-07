@@ -27,7 +27,7 @@ export default function MenuBar() {
   });
 
   return (
-    <div className="menu-bar fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between px-4">
+    <div className="menu-bar fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between px-4 overflow-hidden">
       {/* Left side */}
       <div className="flex items-center gap-5">
         <div className="relative">
@@ -69,16 +69,16 @@ export default function MenuBar() {
       {/* Right side */}
       <div className="flex items-center gap-4">
         {/* Battery */}
-        <img src="/icons/battery.png" alt="Battery" className="h-[12px] opacity-80" style={{ filter: 'brightness(0) invert(1)' }} draggable={false} />
+        <img src="/icons/battery.png" alt="Battery" className="opacity-80" style={{ height: 12, width: 'auto', filter: 'brightness(0) invert(1)' }} draggable={false} />
 
         {/* WiFi */}
-        <img src="/icons/wifi.png" alt="WiFi" className="h-[12px] opacity-80" style={{ filter: 'brightness(0) invert(1)' }} draggable={false} />
+        <img src="/icons/wifi.png" alt="WiFi" className="opacity-80" style={{ height: 12, width: 12, filter: 'brightness(0) invert(1)' }} draggable={false} />
 
         {/* Search/Spotlight */}
-        <img src="/icons/search.png" alt="Spotlight" className="h-[14px] opacity-80" style={{ filter: 'brightness(0) invert(1)' }} draggable={false} />
+        <img src="/icons/search.png" alt="Spotlight" className="opacity-80" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
 
         {/* Control Center */}
-        <img src="/icons/control-center.png" alt="Control Center" className="h-[14px] opacity-80" style={{ filter: 'brightness(0) invert(1)' }} draggable={false} />
+        <img src="/icons/control-center.png" alt="Control Center" className="opacity-80" style={{ height: 14, width: 14, filter: 'brightness(0) invert(1)' }} draggable={false} />
 
         {/* Date & Time */}
         <span className="text-[12.5px] tracking-tight">{formattedTime}</span>

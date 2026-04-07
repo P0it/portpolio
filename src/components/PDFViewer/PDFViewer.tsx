@@ -5,8 +5,7 @@ interface PDFViewerProps {
 }
 
 export default function PDFViewer({ fileId }: PDFViewerProps) {
-  const { getNode } = useFileSystemStore();
-  const node = getNode(fileId);
+  const node = useFileSystemStore((s) => s.nodes[fileId]);
 
   if (!node?.projectData) {
     return (

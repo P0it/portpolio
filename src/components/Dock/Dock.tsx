@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { GlassCard } from 'react-glass-ui';
 import { useWindowStore } from '../../stores/windowStore';
 
 interface DockApp {
@@ -130,14 +131,16 @@ export default function Dock() {
 
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-[9998]">
-      <div className="dock-container flex items-end gap-[2px]">
-        {apps.map(renderIcon)}
+      <GlassCard className="dock-glass-wrapper">
+        <div className="flex items-end gap-[2px] px-1">
+          {apps.map(renderIcon)}
 
-        {/* Separator */}
-        <div className="w-[1px] h-[40px] bg-white/20 mx-1 self-center" />
+          {/* Separator */}
+          <div className="w-[1px] h-[40px] bg-white/20 mx-1 self-center" />
 
-        {docItems.map(renderIcon)}
-      </div>
+          {docItems.map(renderIcon)}
+        </div>
+      </GlassCard>
     </div>
   );
 }

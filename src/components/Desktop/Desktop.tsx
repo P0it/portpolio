@@ -39,7 +39,7 @@ export default function Desktop() {
     <div
       className="fixed inset-0 pt-[25px] pb-[76px]"
       style={{
-        backgroundImage: 'url(/wallpaper-sonoma.jpg)',
+        backgroundImage: 'url(/wallpaper-sonoma.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -51,7 +51,7 @@ export default function Desktop() {
     >
       {/* Desktop Icon Grid - positioned top-right, column-first */}
       <div
-        className="absolute top-2 right-2 grid gap-1"
+        className="absolute top-8 right-2 grid gap-1"
         style={{
           gridAutoFlow: 'column',
           gridTemplateRows: 'repeat(auto-fill, 90px)',
