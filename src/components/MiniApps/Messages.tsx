@@ -45,16 +45,20 @@ export default function Messages() {
 
       {/* Chat Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-5">
           {conversation.slice(0, visibleCount).map((msg, i) => (
             <div key={i} className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}>
               <div
-                className="max-w-[75%] px-5 py-3 rounded-2xl text-[14px] leading-relaxed"
                 style={{
+                  maxWidth: '70%',
+                  padding: '12px 20px',
+                  borderRadius: 20,
+                  fontSize: 15,
+                  lineHeight: 1.5,
                   background: msg.from === 'me' ? '#0b84fe' : 'rgba(255,255,255,0.12)',
                   color: 'white',
-                  borderBottomRightRadius: msg.from === 'me' ? 4 : 18,
-                  borderBottomLeftRadius: msg.from === 'me' ? 18 : 4,
+                  borderBottomRightRadius: msg.from === 'me' ? 4 : 20,
+                  borderBottomLeftRadius: msg.from === 'me' ? 20 : 4,
                 }}
               >
                 {msg.text}
@@ -63,7 +67,7 @@ export default function Messages() {
           ))}
           {visibleCount < conversation.length && (
             <div className="flex justify-start">
-              <div className="px-5 py-3 rounded-2xl text-white/40 text-[14px]" style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <div style={{ padding: '12px 20px', borderRadius: 20, fontSize: 15, background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)' }}>
                 <span className="animate-pulse">...</span>
               </div>
             </div>
