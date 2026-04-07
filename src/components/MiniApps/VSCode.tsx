@@ -18,51 +18,91 @@ const codeLines = [
   { num: 17, text: '  while (true) {', color: '#c586c0' },
   { num: 18, text: '    learn();', color: '#dcdcaa' },
   { num: 19, text: '    build();', color: '#dcdcaa' },
-  { num: 20, text: '    ship();  // 🚀', color: '#dcdcaa' },
+  { num: 20, text: '    ship();  // \u{1F680}', color: '#dcdcaa' },
   { num: 21, text: '    if (motivation < threshold) coffee++;', color: '#c586c0' },
   { num: 22, text: '  }', color: '#c586c0' },
   { num: 23, text: '}', color: '#dcdcaa' },
 ];
 
+interface FileEntry {
+  name: string;
+  indent: number;
+  type: 'folder-open' | 'folder-closed' | 'file';
+  active?: boolean;
+}
+
+const files: FileEntry[] = [
+  { name: 'src', indent: 0, type: 'folder-open' },
+  { name: 'components', indent: 1, type: 'folder-open' },
+  { name: 'developer.tsx', indent: 2, type: 'file', active: true },
+  { name: 'portfolio.tsx', indent: 2, type: 'file' },
+  { name: 'skills.ts', indent: 2, type: 'file' },
+  { name: 'data', indent: 1, type: 'folder-closed' },
+  { name: 'stores', indent: 1, type: 'folder-closed' },
+  { name: 'package.json', indent: 0, type: 'file' },
+  { name: 'tsconfig.json', indent: 0, type: 'file' },
+];
+
+function FileIcon({ type }: { type: FileEntry['type'] }) {
+  if (type === 'folder-open') {
+    return <span style={{ color: '#dcb67a', marginRight: 6, fontSize: 14 }}>📂</span>;
+  }
+  if (type === 'folder-closed') {
+    return <span style={{ color: '#dcb67a', marginRight: 6, fontSize: 14 }}>📁</span>;
+  }
+  return <span style={{ color: '#519aba', marginRight: 6, fontSize: 12 }}>📄</span>;
+}
+
 export default function VSCode() {
   return (
     <div className="h-full flex rounded-b-[10px] overflow-hidden" style={{ background: '#1e1e1e' }}>
       {/* Sidebar - File Explorer */}
-      <div className="w-[220px] border-r border-[#333] py-2" style={{ background: '#252526' }}>
-        <div className="text-[11px] uppercase tracking-wider text-white/40 px-5 py-2">Explorer</div>
-        <div className="text-[13px]">
-          <div className="px-5 py-1 text-white/60">▼ src</div>
-          <div className="px-7 py-1 text-white/60">  ▼ components</div>
-          <div className="px-9 py-1 text-white/90" style={{ background: '#37373d' }}>developer.tsx</div>
-          <div className="px-9 py-1 text-white/40">  portfolio.tsx</div>
-          <div className="px-9 py-1 text-white/40">  skills.ts</div>
-          <div className="px-7 py-1 text-white/60">  ▶ data</div>
-          <div className="px-7 py-1 text-white/60">  ▶ stores</div>
-          <div className="px-5 py-1 text-white/40">package.json</div>
-          <div className="px-5 py-1 text-white/40">tsconfig.json</div>
+      <div className="w-[240px] border-r border-[#333] shrink-0" style={{ background: '#252526' }}>
+        <div className="text-[11px] uppercase tracking-wider text-white/40 px-4 pt-3 pb-2">Explorer</div>
+        <div className="text-[13px] leading-relaxed">
+          {files.map((f, i) => (
+            <div
+              key={i}
+              className="flex items-center py-[3px] hover:bg-white/5"
+              style={{
+                paddingLeft: 16 + f.indent * 16,
+                paddingRight: 12,
+                background: f.active ? '#37373d' : undefined,
+                color: f.active ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.55)',
+              }}
+            >
+              <FileIcon type={f.type} />
+              <span className="truncate">{f.name}</span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Editor */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Tabs */}
-        <div className="flex border-b border-[#333]" style={{ background: '#252526' }}>
-          <div className="px-5 py-2 text-[13px] text-white/80 border-b-2 border-blue-500" style={{ background: '#1e1e1e' }}>
-            developer.tsx
+        <div className="flex border-b border-[#333] shrink-0" style={{ background: '#252526' }}>
+          <div
+            className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/80 border-b-2 border-blue-500 shrink-0"
+            style={{ background: '#1e1e1e' }}
+          >
+            <span style={{ fontSize: 12 }}>📄</span>
+            <span>developer.tsx</span>
           </div>
-          <div className="px-5 py-2 text-[13px] text-white/40">
-            portfolio.tsx
+          <div className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/40 shrink-0">
+            <span style={{ fontSize: 12 }}>📄</span>
+            <span>portfolio.tsx</span>
           </div>
         </div>
 
         {/* Code */}
-        <div className="flex-1 overflow-y-auto font-mono text-[13px] leading-6 py-3">
+        <div className="flex-1 overflow-y-auto font-mono text-[13px] leading-7 py-3">
           {codeLines.map((line) => (
-            <div key={line.num} className="flex hover:bg-white/3 px-4">
-              <span className="w-12 text-right pr-5 select-none" style={{ color: '#858585' }}>
+            <div key={line.num} className="flex hover:bg-white/3 px-3">
+              <span className="w-10 text-right pr-4 select-none shrink-0" style={{ color: '#858585' }}>
                 {line.num}
               </span>
-              <span style={{ color: line.color || '#d4d4d4' }}>
+              <span className="whitespace-pre" style={{ color: line.color || '#d4d4d4' }}>
                 {line.text}
               </span>
             </div>
@@ -70,13 +110,16 @@ export default function VSCode() {
         </div>
 
         {/* Status Bar */}
-        <div className="flex items-center justify-between px-5 py-1 text-[11px]" style={{ background: '#007acc', color: 'white' }}>
-          <div className="flex items-center gap-3">
+        <div
+          className="flex items-center justify-between px-4 py-1 text-[11px] shrink-0 whitespace-nowrap overflow-hidden"
+          style={{ background: '#007acc', color: 'white' }}
+        >
+          <div className="flex items-center gap-4">
             <span>main</span>
             <span>0 errors</span>
             <span>0 warnings</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <span>TypeScript React</span>
             <span>UTF-8</span>
             <span>Ln 20, Col 12</span>

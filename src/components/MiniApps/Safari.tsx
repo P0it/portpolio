@@ -26,31 +26,33 @@ export default function Safari() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-10" style={{ background: '#2a2a2a' }}>
-        <h2 className="text-center text-white/40 text-sm mb-8">Favorites</h2>
-        <div className="grid grid-cols-4 gap-6 max-w-lg mx-auto">
-          {bookmarks.map((b) => (
-            <a
-              key={b.name}
-              href={b.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors"
-              style={{ cursor: 'pointer' }}
-              onClick={() => setUrl(b.url)}
-            >
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                {b.icon}
-              </div>
-              <span className="text-[12px] text-white/60 text-center">{b.name}</span>
-            </a>
-          ))}
-        </div>
+      <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center" style={{ background: '#2a2a2a' }}>
+        <div className="w-full max-w-xl px-8">
+          <h2 className="text-center text-white/40 text-sm mb-8">Favorites</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {bookmarks.map((b) => (
+              <a
+                key={b.name}
+                href={b.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setUrl(b.url)}
+              >
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                  {b.icon}
+                </div>
+                <span className="text-[12px] text-white/60 text-center">{b.name}</span>
+              </a>
+            ))}
+          </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-white/20 text-[12px]">
-            {profile.name}'s Developer Bookmarks
-          </p>
+          <div className="mt-10 text-center">
+            <p className="text-white/20 text-[12px]">
+              {profile.name}'s Developer Bookmarks
+            </p>
+          </div>
         </div>
       </div>
     </div>

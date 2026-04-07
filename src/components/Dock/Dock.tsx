@@ -51,7 +51,7 @@ const apps: DockApp[] = [
     appId: 'iterm',
     windowConfig: {
       title: 'hyunwoo@portfolio ~ %',
-      size: { width: 700, height: 450 },
+      size: { width: 750, height: 620 },
     },
   },
 ];
